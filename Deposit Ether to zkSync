@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./IERC20.sol";
+import "./IZkSync.sol";
+
+contract DepositToZkSync {
+    IZkSync public zkSync;
+    IERC20 public weth;
+
+    constructor(address _zkSync, address _weth) {
+        zkSync = IZkSync(_zkSync);
+        weth = IERC20(_weth);
+    }
+
+    function depositEtherToZkSync() external payable {
+        uint256 amount = msg.value;
+        weth.approve(address(zkSync), amount);
+        zkSync.depositETH{value: amount}(msg.sender);
+    }
+}
